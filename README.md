@@ -38,6 +38,16 @@ project/
 - Backend: Discuss the required functionality of app.py in your team.
 - Data: Examine autoscout24_data.csv.
 - OpenAI API-key: Ensure credentials.json is available contains a valid API-key.
+  - Seperate API-keys are available on the course days on Moodle (Week 11 & Week 12).
+
+```bash
+{
+	"openai": {
+		"api_key": "sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    }
+}
+```
+
 - Frontend: Verify templates/ and static/ files for completeness.
 - Dependencies: Ensure requirements.txt includes all necessary libraries.
 
