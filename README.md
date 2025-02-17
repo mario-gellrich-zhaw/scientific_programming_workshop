@@ -39,6 +39,7 @@ project/
 - Data: Examine autoscout24_data.csv.
 - OpenAI API-key: Ensure credentials.json is available contains a valid API-key.
   - Seperate API-keys are available on the course days on Moodle (Week 11 & Week 12).
+  - (use only on GitHub Codespaces, do not make the API-key public on GitHub)
 
 ```bash
 {
