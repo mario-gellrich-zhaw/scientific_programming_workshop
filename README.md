@@ -34,8 +34,8 @@ project/
 │   
 ├── templates/
 │    ├── index.html                → Main HTML page for user input and output
-│    ├── data.html                 → Data describtion page
-│    └── questions.html            → Example questions page
+│    ├── data.html                 → Data describtion page (table with all data)
+│    └── questions.html            → Example questions page (table with example questions)
 │
 └── requirements.txt               → File to specify the Python libraries
 ```
