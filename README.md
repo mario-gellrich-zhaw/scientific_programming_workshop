@@ -6,6 +6,14 @@ Please use the sample data provided (car data), as this has been properly prepar
 
 **Project folder structure:**
 
+Please note that the following files are **ready to use** and don't need to be modified:
+- devcontainer.json 
+- Procfile
+- autoscout24_data.csv
+- logo.svg (use your own .svg graphic if required)
+- graphic.png (placeholder, will dynamically be overwritten)
+- requirements.txt
+
 ```bash
 project/
 │
@@ -58,8 +66,8 @@ project/
 
 ## 2. Define Backend Requirements
 
-- Framework: In this course we will use Flask.
-- Data Handling: Read 'autoscout24_data.csv' and store the data in a pandas data frame.
+- Framework: In this course we will use Flask as the web framework.
+- Data Handling: Read the file 'autoscout24_data.csv' to a pandas data frame.
 - Routes: Ensure endpoints for / (index), /data, and /questions.
 - API Integration: Securely access credentials.json and handle OpenAI queries.
 - Error Handling: Implement error responses for data loading and API failures.
@@ -105,7 +113,7 @@ project/
 
 ## 6. Prepare for Deployment
 
-- Procfile: Ensure it correctly references web: gunicorn app:app.
+- Procfile: Ensure it correctly references 'web: gunicorn app:app'.
 - Dependencies: Verify requirements.txt includes all required packages.
 - Environment Variables: Secure API keys.
 - Static Files: Ensure proper handling in production.
