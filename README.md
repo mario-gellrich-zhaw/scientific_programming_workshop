@@ -33,7 +33,7 @@ project/
 │   └── graphic.png               → Generated plots (saved here)
 │   
 ├── templates/
-│    ├── index.html                → Main HTML page
+│    ├── index.html                → Main HTML page for user input and output
 │    ├── data.html                 → Data describtion page
 │    └── questions.html            → Example questions page
 │
