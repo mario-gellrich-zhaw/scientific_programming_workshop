@@ -6,13 +6,16 @@ Please use the sample data provided (car data), as this has been properly prepar
 
 **Project folder structure:**
 
-Please note that the following files are **ready to use** and don't need to be modified:
+The following files are **ready to use** and don't need to be modified:
 - devcontainer.json 
 - Procfile
 - autoscout24_data.csv
 - logo.svg (use your own .svg graphic if required)
 - graphic.png (placeholder, will dynamically be overwritten)
 - requirements.txt
+
+The file **app.py** already includes Python code for a minimalistic web application (to have a starting point).
+The Python code can be executed in a VS Code Terminal using: python app.py.
 
 ```bash
 project/
@@ -23,21 +26,17 @@ project/
 ├── app.py                       → The main app file
 ├── Procfile                     → Configuration file for deployment (e.g. on Koyeb)
 ├── data/
-│   ├── autoscout24_data.csv      → .csv file with car data
-│   └── credentials.json          → JSON file storing the OpenAI API key
+│   ├── autoscout24_data.csv     → .csv file with car data
+│   └── credentials.json         → JSON file storing the OpenAI API key
 │
 ├── static/
 │   ├── css/
-|   |   ├── styles.css            → File to define styles (CSS) in HTML pages
-│   ├── logo.svg                  → Logos etc. to include into the HTML pages
-│   └── graphic.png               → Generated plots (saved here)
+|       └── styles.css           → File to define styles (CSS) in HTML pages
 │   
 ├── templates/
-│    ├── index.html                → Main HTML page for user input and output
-│    ├── data.html                 → Data describtion page (includes table with all data)
-│    └── questions.html            → Example questions page (includes table with example questions)
+│    └── index.html               → Main HTML page for user input and output
 │
-└── requirements.txt               → File to specify the Python libraries
+└── requirements.txt              → File to specify the Python libraries
 ```
 
 ## 1. Audit Existing Files
@@ -68,7 +67,7 @@ project/
 
 - Framework: In this course we will use Flask as the web framework.
 - Data Handling: Read the file 'autoscout24_data.csv' to a pandas data frame.
-- Routes: Ensure endpoints for / (index), /data, and /questions.
+- Routes: Ensure endpoints for the index.html page.
 - API Integration: Securely access credentials.json and handle OpenAI queries.
 - Error Handling: Implement error responses for data loading and API failures.
 - Deployment: Validate Procfile for production readiness.
@@ -79,9 +78,9 @@ project/
 
 ## 3. Define Frontend Requirements
 
-- HTML Templates: Ensure index.html, data.html, and questions.html display required data.
+- HTML template: Ensure index.html contains fields for input and output.
+- HTML template: Ensure index.html displays the required data.
 - Styling: Confirm styles.css covers layout and UI elements.
-- Navigation: Verify seamless linking between pages.
 
 **Outcome:** Frontend structure aligned with backend needs.
 
@@ -90,11 +89,9 @@ project/
 ## 4. Implement Backend Logic
 
 - Load Data: Read autoscout24_data.csv into a pandas DataFrame.
-- Define Routes:  
-    / → index.html  
-    /data → data.html  
-    /questions → questions.html  
+- Define the main route for the web application / → index.html
 - API Integration: Handle OpenAI queries (POST/GET requests).
+- Generate, extract and execute the Python code provided by the LLM.
 - Testing: Validate functionality using a browser or Postman.
 
 **Outcome:** Fully functional backend with necessary logic.
