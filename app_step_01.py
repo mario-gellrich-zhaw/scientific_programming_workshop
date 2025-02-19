@@ -45,7 +45,7 @@ def index():
         # Small context instructing GPT about the DataFrame
         prompt_for_gpt = (
             "You have a pandas DataFrame called 'data' loaded "
-            "from 'autoscout24_data.csv'. Please write Python code "
+            "from './data/autoscout24_data.csv'. Please write Python code "
             "that works with this DataFrame.\n\n"
             f"User Prompt: {user_prompt}"
         )
@@ -61,7 +61,7 @@ def index():
         except openai.error.OpenAIError as e:
             gpt_response = f"Error calling OpenAI API: {str(e)}"
 
-    return render_template("index.html", gpt_response=gpt_response)
+    return render_template("index_step_01.html", gpt_response=gpt_response)
 
 
 if __name__ == "__main__":
