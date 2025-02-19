@@ -7,13 +7,11 @@ CSV file. The generated code is then executed, and the results are displayed on
 a web page.
 """
 
-# Import necessary libraries
 import json
-import openai
+from openai import OpenAI
 import pandas as pd
 from flask import Flask, render_template, request
 
-# Set up the Flask app
 app = Flask(__name__)
 
 # Load OpenAI API key from credentials.json
@@ -26,43 +24,42 @@ except FileNotFoundError as exc:
         "Please provide OpenAI API key in the credentials.json file."
     ) from exc
 
-# Set the OpenAI API key
-openai.api_key = API_KEY
+# Initialize OpenAI client
+client = OpenAI(api_key=API_KEY)
 
-# Define the main route of the web application
 @app.route("/", methods=["GET", "POST"])
 def index():
-    """Main route of the web application"""
-
+    """Main route of the web application."""
+    
     gpt_response = ""
 
-    # Load .csv data (needed when Python code is executed)
+    # Load .csv data for code execution context
     data = pd.read_csv("./data/autoscout24_data.csv")
 
     if request.method == "POST":
         user_prompt = request.form.get("prompt", "")
 
-        # Small context instructing GPT about the DataFrame
+        # Context prompt for GPT, describing the DataFrame
         prompt_for_gpt = (
-            "You have a pandas DataFrame called 'data' loaded "
-            "from './data/autoscout24_data.csv'. Please write Python code "
-            "that works with this DataFrame.\n\n"
+            "You have a pandas DataFrame called 'data' "
+            "loaded from './data/autoscout24_data.csv'. "
+            "Please write Python code that works with this DataFrame.\n\n"
             f"User Prompt: {user_prompt}"
         )
 
-        # Send prompt to GPT
+        # Call GPT-3.5-turbo via OpenAI's ChatCompletion endpoint
         try:
-            response = openai.ChatCompletion.create(
+            response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[{"role": "user", "content": prompt_for_gpt}],
                 max_tokens=300
             )
-            gpt_response = response.choices[0].message['content']
-        except openai.error.OpenAIError as e:
+            # Extract the model's response
+            gpt_response = response.choices[0].message.content
+        except Exception as e:
             gpt_response = f"Error calling OpenAI API: {str(e)}"
 
     return render_template("index_step_01.html", gpt_response=gpt_response)
-
 
 if __name__ == "__main__":
     app.run(debug=True)

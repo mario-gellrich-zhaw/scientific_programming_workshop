@@ -14,9 +14,9 @@ The following files are **ready to use** and don't need to be modified:
 - graphic.png (placeholder, will dynamically be overwritten)
 - requirements.txt
 
-The file **app.py** contains a minimalistic web application to have a starting point.
+The file **app_step_01.py** contains a minimalistic web application to have a starting point.
 
-The code in **app.py** can be executed in a VS Code Terminal using: python app.py.
+The code in **app_step_01.py** can be executed in a VS Code Terminal using: python app.py.
 
 ```bash
 project/
@@ -24,7 +24,7 @@ project/
 ├── .devcontainer/
 │    └── devcontainer.json       → Configuration file for setting up the Dev Container
 │
-├── app.py                       → The main app file
+├── app_step_01.py               → The main app file
 ├── Procfile                     → Configuration file for deployment (e.g. on Koyeb)
 ├── data/
 │   ├── autoscout24_data.csv     → .csv file with car data
@@ -35,7 +35,7 @@ project/
 |       └── styles.css           → File to define styles (CSS) in HTML pages
 │   
 ├── templates/
-│    └── index.html               → Main HTML page for user input and output
+│    └── index_step_01.html      → Main HTML page for user input and output
 │
 └── requirements.txt              → File to specify the Python libraries
 ```
@@ -67,7 +67,7 @@ project/
 ## 2. Define Backend Requirements
 
 - Framework: In this course we will use Flask as the web framework.
-- Data Handling: Read the file 'autoscout24_data.csv' to a pandas data frame.
+- Data Handling: Read the file './data/autoscout24_data.csv' to a pandas data frame.
 - Routes: Ensure endpoints for the index.html page.
 - API Integration: Securely access credentials.json and handle OpenAI queries.
 - Error Handling: Implement error responses for data loading and API failures.
@@ -90,7 +90,7 @@ project/
 ## 4. Implement Backend Logic
 
 - Load Data: Read autoscout24_data.csv into a pandas DataFrame.
-- Define the main route for the web application / → index.html
+- Define the main route for the web application / → index_step_01.html
 - API Integration: Handle OpenAI queries (POST/GET requests).
 - Generate, extract and execute the Python code provided by the LLM.
 - Testing: Validate functionality using a browser or Postman.
