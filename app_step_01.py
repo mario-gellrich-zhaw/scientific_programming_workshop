@@ -7,11 +7,13 @@ CSV file. The generated code is then executed, and the results are displayed on
 a web page.
 """
 
+# Import required libraries
 import json
 from openai import OpenAI
 import pandas as pd
 from flask import Flask, render_template, request
 
+# Initialize Flask app
 app = Flask(__name__)
 
 # Load OpenAI API key from credentials.json
