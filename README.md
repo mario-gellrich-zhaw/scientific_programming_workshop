@@ -20,12 +20,12 @@ project/
 │
 ├── static/
 │   ├── css/
-|       └── styles.css           → File to define styles (CSS) in HTML pages
+|   |    └── styles.css          → File to define styles (CSS) in HTML pages
+|   ├── logo.svg                 → .svg graphic (use your own if required)
+|   └── graphic.png              → graphic.png (placeholder, will dynamically be overwritten)
 │   
 ├── templates/
 │   ├── index_step_01.html       → Main HTML page for user input and output
-|   ├── logo.svg                 → .svg graphic (use your own if required)
-|   └── graphic.png              → graphic.png (placeholder, will dynamically be overwritten)
 │
 └── requirements.txt             → File to specify the Python libraries
 ```
