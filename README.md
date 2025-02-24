@@ -25,7 +25,7 @@ project/
 |   └── graphic.png              → graphic.png (placeholder, will dynamically be overwritten)
 │   
 ├── templates/
-│   ├── index_step_01.html       → Main HTML page for user input and output
+│   └── index_step_01.html       → Main HTML page for user input and output
 │
 └── requirements.txt             → File to specify the Python libraries
 ```
