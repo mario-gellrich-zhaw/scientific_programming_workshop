@@ -19,7 +19,17 @@ h1 {
     text-decoration: none;
     display: inline-block;
     font-size: 14px;
-    margin: 0px 2px;
+    margin: 0px 0px;
     cursor: pointer;
     border-radius: 4px;
+}
+textarea {
+    background-color: rgb(46, 46, 46);
+    color: rgb(198, 202, 192);
+    font-size: 14px;
+}
+label {
+    color: greenyellow;
+    margin-bottom: 0px;
+    display: block;
 }
