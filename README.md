@@ -1,6 +1,6 @@
 # Project Setup & Workflow
 
-Below is a structured approach to guide this workshop. Adapt these steps to your specific requirements.
+Below is a structured approach to guide this workshop.
 
 Please use the sample data provided (car data), as this has been properly prepared.
 
