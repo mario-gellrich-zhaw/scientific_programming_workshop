@@ -14,10 +14,6 @@ The following files are **ready to use** and don't need to be modified:
 - graphic.png (placeholder, will dynamically be overwritten)
 - requirements.txt
 
-The file **app_step_01.py** contains a minimalistic web application to have a starting point.
-
-The code in **app_step_01.py** can be executed in a VS Code Terminal using: python app.py.
-
 ```bash
 project/
 │
@@ -38,6 +34,13 @@ project/
 │    └── index_step_01.html      → Main HTML page for user input and output
 │
 └── requirements.txt              → File to specify the Python libraries
+```
+
+The file **app_step_01.py** contains a minimalistic web application to have a starting point.
+
+```bash
+# To execute the code in **app_step_01.py**, open a Terminal and type:
+python app.py
 ```
 
 ## 1. Audit Existing Files
