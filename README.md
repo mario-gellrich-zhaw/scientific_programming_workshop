@@ -42,7 +42,7 @@ The file **app_step_01.py** contains a minimalistic web application to have a st
 
 ```bash
 # To execute the code in **app_step_01.py** open a Terminal and type:
-python app.py
+python app_step_01.py
 ```
 
 ## 1. Audit Existing Files
