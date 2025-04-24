@@ -16,9 +16,22 @@
                 "github.copilot-chat",
                 "mechatroner.rainbow-csv",
                 "tal7aouy.icons"
-            ]
+            ],
+            "settings": {
+                "workbench.colorTheme": "Default Dark Modern",
+                "workbench.startupEditor": "none",
+                "editor.minimap.enabled": false,
+                "files.autoSave": "onFocusChange",
+                "editor.formatOnSave": true,
+                "window.zoomLevel": 0,
+                "locale": "en"
+            }
         }
     },
 
-    "postCreateCommand": "pip install -r requirements.txt"
+    "postCreateCommand": "pip install -r requirements.txt",
+
+    "features": {
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+    }
 }
