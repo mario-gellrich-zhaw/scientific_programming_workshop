@@ -10,7 +10,6 @@ a web page.
 # Import required libraries
 import json
 from openai import OpenAI
-import pandas as pd
 from flask import Flask, render_template, request
 
 # Initialize Flask app
@@ -34,9 +33,6 @@ def index():
     """Main route of the web application."""
     
     gpt_response = ""
-
-    # Load .csv data for code execution context
-    data = pd.read_csv("./data/autoscout24_data.csv")
 
     if request.method == "POST":
         user_prompt = request.form.get("prompt", "")
