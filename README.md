@@ -1,7 +1,7 @@
 # Project Setup & Workflow Augmented Analytics Application
 
 In this workshop, we will develop an Augmented Analytics Application using 
-Python (programming language), Flask (web framework) and Koyeb (deployment).
+Python (programming language), Flask (web framework) and Koyeb (web deployment).
 
 Below is a structured approach to guide this workshop.
 
