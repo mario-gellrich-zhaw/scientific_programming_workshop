@@ -1,3 +1,6 @@
+# Credentials
+data/credentials.json
+
 # app.py
 app_step_02.py
 app_step_03.py
