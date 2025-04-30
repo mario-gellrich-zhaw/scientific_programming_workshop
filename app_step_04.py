@@ -11,23 +11,20 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
+# Set your OpenAI API key here or set it as an environment variable
+# Linux/macOS (bash/zsh): export OPENAI_API_KEY="your-api-key-here"
+# On Windows (Command Prompt): set OPENAI_API_KEY=your-api-key-here
+
+# Load OpenAI API key from environment variable
+api_key = os.getenv("OPENAI_API_KEY")
+
 # Set dark background for all plots
 plt.style.use('dark_background')
 
 app = Flask(__name__)
 
-# Load OpenAI API key from credentials.json
-try:
-    with open('./data/credentials.json', encoding='utf-8') as file:
-        credentials = json.load(file)
-        API_KEY = credentials['openai']['api_key']
-except FileNotFoundError as exc:
-    raise ValueError(
-        "Please provide OpenAI API key in the credentials.json file."
-    ) from exc
-
 # Initialize OpenAI client
-client = OpenAI(api_key=API_KEY)
+client = OpenAI(api_key=api_key)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
