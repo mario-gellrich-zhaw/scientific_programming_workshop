@@ -33,3 +33,61 @@ label {
     margin-bottom: 0px;
     display: block;
 }
+.sidebar {
+    width: 200px;
+    background-color: #1f1f1f;
+    color: white;
+    height: 100vh;
+    padding-top: 20px;
+    position: fixed;
+    left: 0;
+    top: 0;
+}
+
+.sidebar a {
+    display: block;
+    color: greenyellow;
+    padding: 12px 20px;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+.sidebar a:hover {
+    background-color: #333;
+}
+
+.main-content {
+    margin-left: 200px;
+    padding: 20px;
+}
+table {
+    width: 95%;
+    border-collapse: collapse;
+    color: #FFFFFF;
+    background-color: #333;
+    font-size: 9px;
+    margin-left: 0px;
+}
+th, td {
+    padding: 4px;
+    border: 0.5px solid #D3D3D3;
+    text-align: left;
+}
+th {
+    background-color: #444;
+    color: #ADFF2F;
+}
+.query-list {
+    list-style-type: none;
+    padding: 0;
+    width: 100%;
+    max-width: 90%;
+}
+.query-list li {
+    margin: 10px 0;
+    padding: 5px;
+    background-color: #333;
+    border: 1px solid #FFFFFF;
+    border-radius: 5px;
+    font-size: 16px;
+}
