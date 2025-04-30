@@ -1,12 +1,12 @@
 body {
     background-color: #121212;
-    color: #FFFFFF;
+    color: white;
     font-family: Arial, sans-serif;
 }
 h1 {
     font-family: Arial, sans-serif;
     font-size: 22px;
-    color: greenyellow;
+    color: white;
     text-align: left;
     margin-top: 20px;
 }
@@ -27,9 +27,12 @@ textarea {
     background-color: rgb(46, 46, 46);
     color: rgb(198, 202, 192);
     font-size: 14px;
+    width: 80%;
+    max-width: 800px;
+    box-sizing: border-box;
 }
 label {
-    color: greenyellow;
+    color: white;
     margin-bottom: 0px;
     display: block;
 }
@@ -42,20 +45,22 @@ label {
     position: fixed;
     left: 0;
     top: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
-
 .sidebar a {
     display: block;
-    color: greenyellow;
-    padding: 12px 20px;
+    color: white;
     text-decoration: none;
+    padding: 12px 0;
+    width: 100%;
+    text-align: center;
     transition: background-color 0.2s ease;
 }
-
 .sidebar a:hover {
     background-color: #333;
 }
-
 .main-content {
     margin-left: 200px;
     padding: 20px;
@@ -75,7 +80,7 @@ th, td {
 }
 th {
     background-color: #444;
-    color: #ADFF2F;
+    color: #FFFFFF;
 }
 .query-list {
     list-style-type: none;
