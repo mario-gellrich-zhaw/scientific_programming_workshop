@@ -16,7 +16,7 @@ project/
 ├── .devcontainer/
 │    └── devcontainer.json       → Configuration file for setting up the Dev Container
 │
-├── app_step_01.py               → The main app file
+├── app_step_01.py               → The main app file (step 1)
 ├── Procfile                     → Configuration file for deployment (e.g. on Koyeb)
 ├── data/
 │   ├── autoscout24_data.csv     → .csv file with car data
@@ -29,7 +29,7 @@ project/
 |   └── graphic.png              → graphic.png (placeholder, will dynamically be overwritten)
 │   
 ├── templates/
-│   └── index_step_01.html       → Main HTML page for user input and output
+│   └── index_step_01.html       → Main HTML page for user input and output (step 1)
 │
 └── requirements.txt             → File to specify the Python libraries
 ```
