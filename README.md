@@ -141,6 +141,8 @@ python app_step_01.py
 
 **Outcome:** A deployed, fully tested application.
 
+---
+
 ## 8. Sync Origin with Upstream
 
 ```bash
