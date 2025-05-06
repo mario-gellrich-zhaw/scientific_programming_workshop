@@ -1,3 +1,12 @@
+"""
+This module - when fully developed - sets up a Flask web application that 
+interacts with the OpenAI GPT-3.5-turbo model. It loads an OpenAI API key from 
+an environmental variable, reads data from a CSV file, and allows users to submit 
+prompts to generate Python code that works with the DataFrame loaded from the 
+CSV file. The generated code is then executed, and the results are displayed on 
+a web page.
+"""
+
 import os
 import json
 from openai import OpenAI
