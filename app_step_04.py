@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 # Set your OpenAI API key here or set it as an environment variable
 # Linux/macOS (bash/zsh): export OPENAI_API_KEY="your-api-key-here"
 # On Windows (Command Prompt): set OPENAI_API_KEY=your-api-key-here
+# On Koyeb: set the environment variable in the Koyeb dashboard
 
 # Load OpenAI API key from environment variable
 api_key = os.getenv("OPENAI_API_KEY")
