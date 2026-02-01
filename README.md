@@ -28,10 +28,15 @@ project/
 |   └── graphic.png              → graphic.png (placeholder, will dynamically be overwritten)
 │   
 ├── templates/
-│   └── index_step_01.html       → Main HTML page for user input and output (step 1)
+│   ├── index_step_01.html       → Main HTML page for user input and output (step 1)
+│   ├── index_step_02.html       → Main HTML page for user input and output (step 2)
+│   ├── index_step_03.html       → Main HTML page for user input and output (step 3)
+│   ├── index_step_04.html       → Main HTML page for user input and output (step 4)
 │
+├── Procfile                     → File with infos for e.g. Heroku/Koyeb what command to run to start the app
+├── README.md                    → This file
 ├── .env.example                 → example .env file
-├── .env                         → .env file with OpenAI API key
+├── .env                         → .env file with OpenAI API key (provided on Moodle)
 └── requirements.txt             → File to specify the Python libraries
 ```
 
