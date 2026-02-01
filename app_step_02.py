@@ -8,29 +8,22 @@ a web page.
 """
 
 import os
-import json
-from openai import OpenAI
+from openai import OpenAI, OpenAIError
 import pandas as pd
 from flask import Flask, render_template, request
-
-import io
-import sys
+from dotenv import load_dotenv
 import re
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
 
 app = Flask(__name__)
 
-# Load OpenAI API key from credentials.json
-try:
-    with open('./data/credentials.json', encoding='utf-8') as file:
-        credentials = json.load(file)
-        API_KEY = credentials['openai']['api_key']
-except FileNotFoundError as exc:
+# Load OpenAI API key from .env (or environment)
+load_dotenv()
+API_KEY = os.getenv("OPENAI_API_KEY")
+
+if not API_KEY:
     raise ValueError(
-        "Please provide OpenAI API key in the credentials.json file."
-    ) from exc
+        "Please set OPENAI_API_KEY in a .env file (or as an environment variable)."
+    )
 
 # Initialize OpenAI client
 client = OpenAI(api_key=API_KEY)
@@ -38,9 +31,7 @@ client = OpenAI(api_key=API_KEY)
 @app.route("/", methods=["GET", "POST"])
 def index():
     gpt_response = ""
-    execution_result = ""
     code_to_execute = ""
-    show_graphic = False
 
     # Remove any existing graphics
     if os.path.exists("./static/graphic.png"):
@@ -86,7 +77,7 @@ def index():
                 # If no code blocks found, treat the entire response as code
                 code_to_execute = gpt_response.strip()
         
-        except Exception as e:
+        except OpenAIError as e:  # pylint: disable=broad-exception-caught  # type: ignore
             gpt_response = f"Error calling OpenAI API: {str(e)}"
 
     return render_template(

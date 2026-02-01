@@ -19,8 +19,7 @@ project/
 ├── app_step_01.py               → The main app file (step 1)
 ├── Procfile                     → Configuration file for deployment (e.g. on Koyeb)
 ├── data/
-│   ├── autoscout24_data.csv     → .csv file with car data
-│   └── credentials.json         → JSON file storing the OpenAI API key
+│   └── autoscout24_data.csv     → .csv file with car data
 │
 ├── static/
 │   ├── css/
@@ -31,6 +30,8 @@ project/
 ├── templates/
 │   └── index_step_01.html       → Main HTML page for user input and output (step 1)
 │
+├── .env.example                 → example .env file
+├── .env                         → .env file with OpenAI API key
 └── requirements.txt             → File to specify the Python libraries
 ```
 
@@ -54,16 +55,12 @@ python app_step_01.py
 - Configuration: Check .devcontainer/devcontainer.json and Procfile setup.
 - Backend: Discuss the required functionality of app.py in your team.
 - Data: Examine the file autoscout24_data.csv.
-- OpenAI API-key: Ensure credentials.json is available and contains a valid API-key.
+- OpenAI API-key: Ensure a .env file is available and contains a valid API-key.
   - An API-key is available on the course days (Week 11 & Week 12) on Moodle.
     (use the API-key only on GitHub Codespaces, do not make it public on GitHub)
 
 ```bash
-{
-	"openai": {
-		"api_key": "sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-    }
-}
+OPENAI_API_KEY=sk-proj-...
 ```
 
 - Frontend: Verify templates/ and static/ files for completeness.
@@ -79,7 +76,7 @@ python app_step_01.py
 - Framework: In this course we will use Flask as the web framework.
 - Data Handling: Read the file './data/autoscout24_data.csv' to a pandas data frame.
 - Routes: Ensure endpoints for the index.html page and each additional .html page.
-- API Integration: Securely access credentials.json and handle OpenAI queries.
+- API Integration: Securely access the OpenAI API key via .env / environment variables and handle OpenAI queries.
 - Error Handling: Implement error responses for data loading and API failures.
 - Deployment: Validate Procfile for production readiness.
 

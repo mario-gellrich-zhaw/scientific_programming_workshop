@@ -8,22 +8,22 @@ a web page.
 """
 
 # Import required libraries
-import json
-from openai import OpenAI
+import os
+from openai import OpenAI, OpenAIError
 from flask import Flask, render_template, request
+from dotenv import load_dotenv
 
 # Initialize Flask app
 app = Flask(__name__)
 
-# Load OpenAI API key from credentials.json
-try:
-    with open('./data/credentials.json', encoding='utf-8') as file:
-        credentials = json.load(file)
-        API_KEY = credentials['openai']['api_key']
-except FileNotFoundError as exc:
+# Load OpenAI API key from .env (or environment)
+load_dotenv()
+API_KEY = os.getenv("OPENAI_API_KEY")
+
+if not API_KEY:
     raise ValueError(
-        "Please provide OpenAI API key in the credentials.json file."
-    ) from exc
+        "Please set OPENAI_API_KEY in a .env file (or as an environment variable)."
+    )
 
 # Initialize OpenAI client
 client = OpenAI(api_key=API_KEY)
@@ -54,7 +54,7 @@ def index():
             )
             # Extract the model's response
             gpt_response = response.choices[0].message.content
-        except Exception as e:
+        except OpenAIError as e:  # pylint: disable=broad-exception-caught
             gpt_response = f"Error calling OpenAI API: {str(e)}"
 
     return render_template("index_step_01.html", gpt_response=gpt_response)

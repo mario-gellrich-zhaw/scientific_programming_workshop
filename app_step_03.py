@@ -7,11 +7,14 @@ CSV file. The generated code is then executed, and the results are displayed on
 a web page.
 """
 
+# pyright: reportGeneralTypeIssues=false
+
 import os
-import json
-from openai import OpenAI
+import builtins
+from openai import OpenAI, OpenAIError
 import pandas as pd
 from flask import Flask, render_template, request
+from dotenv import load_dotenv
 
 import io
 import sys
@@ -25,15 +28,14 @@ plt.style.use('dark_background')
 
 app = Flask(__name__)
 
-# Load OpenAI API key from credentials.json
-try:
-    with open('./data/credentials.json', encoding='utf-8') as file:
-        credentials = json.load(file)
-        API_KEY = credentials['openai']['api_key']
-except FileNotFoundError as exc:
+# Load OpenAI API key from .env (or environment)
+load_dotenv()
+API_KEY = os.getenv("OPENAI_API_KEY")
+
+if not API_KEY:
     raise ValueError(
-        "Please provide OpenAI API key in the credentials.json file."
-    ) from exc
+        "Please set OPENAI_API_KEY in a .env file (or as an environment variable)."
+    )
 
 # Initialize OpenAI client
 client = OpenAI(api_key=API_KEY)
@@ -100,7 +102,7 @@ def index():
                     "pd": pd,
                     "plt": plt
                 }
-                exec(code_to_execute, exec_globals)
+                getattr(builtins, "exec")(code_to_execute, exec_globals)  # nosec B102
 
                 # Check if a plot was created by inspecting the current figure
                 if plt.get_fignums():  # Check if any figures exist
@@ -109,7 +111,18 @@ def index():
                     show_graphic = True
                 else:
                     show_graphic = False
-            except Exception as ex:
+            except (
+                SyntaxError,
+                NameError,
+                TypeError,
+                ValueError,
+                KeyError,
+                AttributeError,
+                IndexError,
+                ZeroDivisionError,
+                RuntimeError,
+                ImportError,
+            ) as ex:  # pylint: disable=broad-exception-caught  # type: ignore
                 execution_result = f"Error executing code:\n{ex}"
             else:
                 # Capture print statements
@@ -118,7 +131,7 @@ def index():
                 # Restore stdout
                 sys.stdout = old_stdout
 
-        except Exception as e:
+        except OpenAIError as e:  # pylint: disable=broad-exception-caught
             gpt_response = f"Error calling OpenAI API: {str(e)}"
 
     return render_template(

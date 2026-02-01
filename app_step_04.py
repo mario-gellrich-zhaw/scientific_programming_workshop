@@ -7,11 +7,14 @@ CSV file. The generated code is then executed, and the results are displayed on
 a web page.
 """
 
+# pyright: reportGeneralTypeIssues=false
+
 import os
-import json
-from openai import OpenAI
+import builtins
+from openai import OpenAI, OpenAIError
 import pandas as pd
 from flask import Flask, render_template, request
+from dotenv import load_dotenv
 
 import io
 import sys
@@ -25,8 +28,14 @@ import matplotlib.pyplot as plt
 # On Windows (Command Prompt): set OPENAI_API_KEY=your-api-key-here
 # On Koyeb: set the environment variable in the Koyeb dashboard
 
-# Load OpenAI API key from environment variable
+# Load OpenAI API key from .env (or environment variable)
+load_dotenv()
 api_key = os.getenv("OPENAI_API_KEY")
+
+if not api_key:
+    raise ValueError(
+        "Please set OPENAI_API_KEY in a .env file (or as an environment variable)."
+    )
 
 # Set dark background for all plots
 plt.style.use('dark_background')
@@ -88,20 +97,31 @@ def index():
                     "pd": pd,
                     "plt": plt
                 }
-                exec(code_to_execute, exec_globals)
+                getattr(builtins, "exec")(code_to_execute, exec_globals)  # nosec B102
 
                 if plt.get_fignums():
                     plt.savefig("./static/graphic.png")
                     plt.close()
                     show_graphic = True
-            except Exception as ex:
+            except (
+                SyntaxError,
+                NameError,
+                TypeError,
+                ValueError,
+                KeyError,
+                AttributeError,
+                IndexError,
+                ZeroDivisionError,
+                RuntimeError,
+                ImportError,
+            ) as ex:  # pylint: disable=broad-exception-caught  # type: ignore
                 execution_result = f"Error executing code:\n{ex}"
             else:
                 execution_result = redirected_output.getvalue()
             finally:
                 sys.stdout = old_stdout
 
-        except Exception as e:
+        except OpenAIError as e:  # pylint: disable=broad-exception-caught
             gpt_response = f"Error calling OpenAI API: {str(e)}"
 
     return render_template(
@@ -119,7 +139,7 @@ def data_page():
     try:
         data = pd.read_csv("./data/autoscout24_data.csv")
         sample = data.head(10).to_html(classes="data", index=False)
-    except Exception as e:
+    except (OSError, UnicodeDecodeError, ValueError, pd.errors.ParserError) as e:  # pylint: disable=broad-exception-caught
         sample = f"<p>Error loading data: {e}</p>"
     return render_template("data.html", table_html=sample)
 

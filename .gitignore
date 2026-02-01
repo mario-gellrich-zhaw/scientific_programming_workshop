@@ -1,6 +1,9 @@
 # Credentials
 data/credentials.json
 
+# Local environment variables
+.env
+
 # app.py
 # app_step_02.py
 # app_step_03.py
