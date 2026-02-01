@@ -1,26 +1,26 @@
-"""
-This module - when fully developed - sets up a Flask web application that 
-interacts with the OpenAI GPT-3.5-turbo model. It loads an OpenAI API key from 
-a credentials file, reads data from a CSV file, and allows users to submit 
-prompts to generate Python code that works with the DataFrame loaded from the 
-CSV file. The generated code is then executed, and the results are displayed on 
-a web page.
+"""Augmented Analytics Flask demo app (step 03).
+
+This module sets up a Flask web application that interacts with an OpenAI chat
+model. It loads an OpenAI API key from a .env file, reads data from a CSV file,
+and allows users to submit prompts. Model-generated code is executed and the
+result is displayed.
 """
 
 # pyright: reportGeneralTypeIssues=false
 
-import os
 import builtins
-from openai import OpenAI, OpenAIError
-import pandas as pd
-from flask import Flask, render_template, request
-from dotenv import load_dotenv
-
 import io
-import sys
+import os
 import re
+import sys
+
 import matplotlib
-matplotlib.use('Agg')
+import pandas as pd
+from dotenv import load_dotenv
+from flask import Flask, render_template, request
+from openai import OpenAI, OpenAIError
+
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 # Set dark background for all plots
@@ -34,14 +34,18 @@ API_KEY = os.getenv("OPENAI_API_KEY")
 
 if not API_KEY:
     raise ValueError(
-        "Please set OPENAI_API_KEY in a .env file (or as an environment variable)."
+        "Please set OPENAI_API_KEY in a .env file (or as an environment "
+        "variable)."
     )
 
 # Initialize OpenAI client
 client = OpenAI(api_key=API_KEY)
 
+
 @app.route("/", methods=["GET", "POST"])
 def index():
+    """Render the prompt UI and show model output."""
+
     gpt_response = ""
     execution_result = ""
     code_to_execute = ""
@@ -77,14 +81,17 @@ def index():
             response = client.chat.completions.create(
                 model="gpt-4.1-mini",
                 messages=[{"role": "user", "content": prompt_for_gpt}],
-                max_tokens=300
+                max_tokens=300,
             )
             # Extract the model's response
             gpt_response = response.choices[0].message.content
 
             # Extract code between triple backticks
-            code_blocks = re.findall(r"```(?:python)?(.*?)```", 
-                                     gpt_response, re.DOTALL)
+            code_blocks = re.findall(
+                r"```(?:python)?(.*?)```",
+                gpt_response,
+                re.DOTALL,
+            )
             if code_blocks:
                 code_to_execute = code_blocks[0].strip()
             else:
@@ -100,7 +107,7 @@ def index():
                 exec_globals = {
                     "data": data,
                     "pd": pd,
-                    "plt": plt
+                    "plt": plt,
                 }
                 getattr(builtins, "exec")(code_to_execute, exec_globals)  # nosec B102
 
@@ -140,8 +147,9 @@ def index():
         gpt_response=gpt_response,
         code_to_execute=code_to_execute,
         execution_result=execution_result,
-        show_graphic=show_graphic
+        show_graphic=show_graphic,
     )
+
 
 if __name__ == "__main__":
     app.run(debug=True)

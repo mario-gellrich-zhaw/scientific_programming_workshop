@@ -1,18 +1,17 @@
-"""
-This module - when fully developed - sets up a Flask web application that 
-interacts with the OpenAI GPT-3.5-turbo model. It loads an OpenAI API key from 
-a credentials file, reads data from a CSV file, and allows users to submit 
-prompts to generate Python code that works with the DataFrame loaded from the 
-CSV file. The generated code is then executed, and the results are displayed on 
-a web page.
+"""Augmented Analytics Flask demo app (step 02).
+
+This module sets up a Flask web application that interacts with an OpenAI chat
+model. It loads an OpenAI API key from a .env file, reads data from a CSV file,
+and allows users to submit prompts. The generated code is displayed.
 """
 
 import os
-from openai import OpenAI, OpenAIError
-import pandas as pd
-from flask import Flask, render_template, request
-from dotenv import load_dotenv
 import re
+
+import pandas as pd
+from dotenv import load_dotenv
+from flask import Flask, render_template, request
+from openai import OpenAI, OpenAIError
 
 app = Flask(__name__)
 
@@ -22,14 +21,18 @@ API_KEY = os.getenv("OPENAI_API_KEY")
 
 if not API_KEY:
     raise ValueError(
-        "Please set OPENAI_API_KEY in a .env file (or as an environment variable)."
+        "Please set OPENAI_API_KEY in a .env file (or as an environment "
+        "variable)."
     )
 
 # Initialize OpenAI client
 client = OpenAI(api_key=API_KEY)
 
+
 @app.route("/", methods=["GET", "POST"])
 def index():
+    """Render the prompt UI and show model output."""
+
     gpt_response = ""
     code_to_execute = ""
 
@@ -63,20 +66,23 @@ def index():
             response = client.chat.completions.create(
                 model="gpt-4.1-mini",
                 messages=[{"role": "user", "content": prompt_for_gpt}],
-                max_tokens=300
+                max_tokens=300,
             )
             # Extract the model's response
             gpt_response = response.choices[0].message.content
-        
+
             # Extract code between triple backticks
-            code_blocks = re.findall(r"```(?:python)?(.*?)```", 
-                                        gpt_response, re.DOTALL)
+            code_blocks = re.findall(
+                r"```(?:python)?(.*?)```",
+                gpt_response,
+                re.DOTALL,
+            )
             if code_blocks:
                 code_to_execute = code_blocks[0].strip()
             else:
                 # If no code blocks found, treat the entire response as code
                 code_to_execute = gpt_response.strip()
-        
+
         except OpenAIError as e:  # pylint: disable=broad-exception-caught  # type: ignore
             gpt_response = f"Error calling OpenAI API: {str(e)}"
 
@@ -84,8 +90,9 @@ def index():
         "index_step_02.html",
         prompt=request.form.get("prompt", ""),
         gpt_response=gpt_response,
-        code_to_execute=code_to_execute
+        code_to_execute=code_to_execute,
     )
+
 
 if __name__ == "__main__":
     app.run(debug=True)

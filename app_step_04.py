@@ -1,26 +1,28 @@
-"""
-This module - when fully developed - sets up a Flask web application that 
-interacts with the OpenAI GPT-3.5-turbo model. It loads an OpenAI API key from 
-an environmental variable, reads data from a CSV file, and allows users to submit 
-prompts to generate Python code that works with the DataFrame loaded from the 
-CSV file. The generated code is then executed, and the results are displayed on 
-a web page.
+"""Augmented Analytics Flask demo app (step 04).
+
+This module sets up a Flask web application that interacts with an OpenAI chat
+model. It loads an OpenAI API key from a .env file or environment variable,
+reads data from a CSV file, and allows users to submit prompts.
+
+Model-generated code is executed and results are displayed.
 """
 
 # pyright: reportGeneralTypeIssues=false
 
-import os
 import builtins
-from openai import OpenAI, OpenAIError
-import pandas as pd
-from flask import Flask, render_template, request
-from dotenv import load_dotenv
-
 import io
-import sys
+import os
 import re
+import sys
+
 import matplotlib
-matplotlib.use('Agg')
+
+import pandas as pd
+from dotenv import load_dotenv
+from flask import Flask, render_template, request
+from openai import OpenAI, OpenAIError
+
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 # Set your OpenAI API key here or set it as an environment variable
@@ -34,7 +36,8 @@ api_key = os.getenv("OPENAI_API_KEY")
 
 if not api_key:
     raise ValueError(
-        "Please set OPENAI_API_KEY in a .env file (or as an environment variable)."
+        "Please set OPENAI_API_KEY in a .env file (or as an environment "
+        "variable)."
     )
 
 # Set dark background for all plots
@@ -45,8 +48,11 @@ app = Flask(__name__)
 # Initialize OpenAI client
 client = OpenAI(api_key=api_key)
 
+
 @app.route("/", methods=["GET", "POST"])
 def index():
+    """Render the main prompt UI."""
+
     gpt_response = ""
     execution_result = ""
     code_to_execute = ""
@@ -77,11 +83,14 @@ def index():
             response = client.chat.completions.create(
                 model="gpt-4.1-mini",
                 messages=[{"role": "user", "content": prompt_for_gpt}],
-                max_tokens=300
+                max_tokens=300,
             )
             gpt_response = response.choices[0].message.content
-            code_blocks = re.findall(r"```(?:python)?(.*?)```", 
-                                     gpt_response, re.DOTALL)
+            code_blocks = re.findall(
+                r"```(?:python)?(.*?)```",
+                gpt_response,
+                re.DOTALL,
+            )
             if code_blocks:
                 code_to_execute = code_blocks[0].strip()
             else:
@@ -95,7 +104,7 @@ def index():
                 exec_globals = {
                     "data": data,
                     "pd": pd,
-                    "plt": plt
+                    "plt": plt,
                 }
                 getattr(builtins, "exec")(code_to_execute, exec_globals)  # nosec B102
 
@@ -130,22 +139,31 @@ def index():
         gpt_response=gpt_response,
         code_to_execute=code_to_execute,
         execution_result=execution_result,
-        show_graphic=show_graphic
+        show_graphic=show_graphic,
     )
 
 
 @app.route("/data")
 def data_page():
+    """Render a small HTML sample of the dataset."""
+
     try:
         data = pd.read_csv("./data/autoscout24_data.csv")
         sample = data.head(10).to_html(classes="data", index=False)
-    except (OSError, UnicodeDecodeError, ValueError, pd.errors.ParserError) as e:  # pylint: disable=broad-exception-caught
+    except (
+        OSError,
+        UnicodeDecodeError,
+        ValueError,
+        pd.errors.ParserError,
+    ) as e:  # pylint: disable=broad-exception-caught
         sample = f"<p>Error loading data: {e}</p>"
     return render_template("data.html", table_html=sample)
 
 
 @app.route("/questions")
 def example_question():
+    """Render an example question for users."""
+
     example_prompt = "What is the average price of cars by fuel type?"
     return render_template("questions.html", prompt_example=example_prompt)
 
