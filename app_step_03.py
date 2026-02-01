@@ -14,14 +14,14 @@ import os
 import re
 import sys
 
-import matplotlib
 import pandas as pd
 from dotenv import load_dotenv
 from flask import Flask, render_template, request
 from openai import OpenAI, OpenAIError
 
-matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use("Agg")
 
 # Set dark background for all plots
 plt.style.use('dark_background')
