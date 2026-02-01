@@ -61,7 +61,7 @@ def index():
         # Call GPT-3.5-turbo via OpenAI's ChatCompletion endpoint
         try:
             response = client.chat.completions.create(
-                model="gpt-3.5-turbo",
+                model="gpt-4.1-mini",
                 messages=[{"role": "user", "content": prompt_for_gpt}],
                 max_tokens=300
             )
