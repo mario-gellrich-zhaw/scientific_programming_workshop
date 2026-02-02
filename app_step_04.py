@@ -25,10 +25,9 @@ else:
 try:
     _module = importlib.import_module("scientific_programming_workshop.apps.step_04")
 except ModuleNotFoundError as e:
-    missing = e.name or "<unknown>"
     raise ModuleNotFoundError(
         "A required dependency is missing while starting the app.\n\n"
-        f"Missing module: {missing}\n"
+        f"Missing module: {e.name or '<unknown>'}\n"
         f"Python executable: {sys.executable}\n\n"
         "Fix:\n"
         "- Activate your virtualenv/conda env\n"

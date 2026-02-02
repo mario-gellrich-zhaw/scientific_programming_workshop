@@ -3,11 +3,10 @@
 from __future__ import annotations
 
 import matplotlib
+import matplotlib.pyplot as plt
 
 # Must be set before importing pyplot.
 matplotlib.use("Agg")
-
-import matplotlib.pyplot as plt  # noqa: E402
 
 
 def configure_plot_style() -> None:
