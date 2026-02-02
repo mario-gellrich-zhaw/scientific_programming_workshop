@@ -1,0 +1,7 @@
+[tool.pyright]
+include = ["src", "tests", "app_step_*.py"]
+extraPaths = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

@@ -1,64 +1,38 @@
-"""Augmented Analytics Flask demo app.
+"""Workshop entrypoint (step 01).
 
-This module - when fully developed - sets up a Flask web application that
-interacts with an OpenAI chat model. It loads an OpenAI API key from a .env
-file, and allows users to submit prompts.
+This file remains as a stable entrypoint for the workshop instructions.
+The implementation lives in the `src/` package.
 """
 
-import os
+from __future__ import annotations
 
-from dotenv import load_dotenv
-from flask import Flask, render_template, request
-from openai import OpenAI, OpenAIError
-
-# Initialize Flask app
-app = Flask(__name__)
-
-# Load OpenAI API key from .env (or environment)
-load_dotenv()
-API_KEY = os.getenv("OPENAI_API_KEY")
-
-if not API_KEY:
-    raise ValueError(
-        "Please set OPENAI_API_KEY in a .env file (or as an environment "
-        "variable)."
-    )
-
-# Initialize OpenAI client
-client = OpenAI(api_key=API_KEY)
+import importlib
+import sys
+from pathlib import Path
+from typing import TYPE_CHECKING, cast
 
 
-@app.route("/", methods=["GET", "POST"])
-def index():
-    """Main route of the web application."""
+SRC_DIR = Path(__file__).resolve().parent / "src"
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
 
-    gpt_response = ""
+if TYPE_CHECKING:
+    from flask import Flask as _Flask
 
-    if request.method == "POST":
-        user_prompt = request.form.get("prompt", "")
+try:
+    _module = importlib.import_module("scientific_programming_workshop.apps.step_01")
+except ModuleNotFoundError as e:
+    missing = e.name or "<unknown>"
+    raise ModuleNotFoundError(
+        "A required dependency is missing while starting the app.\n\n"
+        f"Missing module: {missing}\n"
+        f"Python executable: {sys.executable}\n\n"
+        "Fix:\n"
+        "- Activate your virtualenv/conda env\n"
+        "- Install dependencies: pip install -r requirements.txt\n"
+    ) from e
 
-        # Context prompt for GPT, describing the DataFrame
-        prompt_for_gpt = (
-            "You have a pandas DataFrame called 'data' "
-            "loaded from './data/autoscout24_data.csv'. "
-            "Please write Python code that works with this DataFrame.\n\n"
-            f"User Prompt: {user_prompt}"
-        )
-
-        # Call GPT-3.5-turbo via OpenAI's ChatCompletion endpoint
-        try:
-            response = client.chat.completions.create(
-                model="gpt-4.1-mini",
-                messages=[{"role": "user", "content": prompt_for_gpt}],
-                max_tokens=300,
-            )
-            # Extract the model's response
-            gpt_response = response.choices[0].message.content
-        except OpenAIError as e:  # pylint: disable=broad-exception-caught
-            gpt_response = f"Error calling OpenAI API: {str(e)}"
-
-    return render_template("index_step_01.html", gpt_response=gpt_response)
-
+app = cast("_Flask", getattr(_module, "app"))
 
 if __name__ == "__main__":
     app.run(debug=True)

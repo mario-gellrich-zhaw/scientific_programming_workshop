@@ -1,170 +1,40 @@
-"""Augmented Analytics Flask demo app (step 04).
+"""Workshop entrypoint (step 04).
 
-This module sets up a Flask web application that interacts with an OpenAI chat
-model. It loads an OpenAI API key from a .env file or environment variable,
-reads data from a CSV file, and allows users to submit prompts.
+This file is also the production entrypoint referenced by `Procfile`:
+`web: gunicorn app_step_04:app`
 
-Model-generated code is executed and results are displayed.
+The implementation lives in the `src/` package.
 """
 
-# pyright: reportGeneralTypeIssues=false
+from __future__ import annotations
 
-import builtins
-import io
-import os
-import re
+import importlib
 import sys
-
-import pandas as pd
-from dotenv import load_dotenv
-from flask import Flask, render_template, request
-from openai import OpenAI, OpenAIError
-
-import matplotlib.pyplot as plt
-import matplotlib
-matplotlib.use("Agg")
-
-# Set your OpenAI API key here or set it as an environment variable
-# Linux/macOS (bash/zsh): export OPENAI_API_KEY="your-api-key-here"
-# On Windows (Command Prompt): set OPENAI_API_KEY=your-api-key-here
-# On Koyeb: set the environment variable in the Koyeb dashboard
-
-# Load OpenAI API key from .env (or environment variable)
-load_dotenv()
-api_key = os.getenv("OPENAI_API_KEY")
-
-if not api_key:
-    raise ValueError(
-        "Please set OPENAI_API_KEY in a .env file (or as an environment "
-        "variable)."
-    )
-
-# Set dark background for all plots
-plt.style.use('dark_background')
-
-app = Flask(__name__)
-
-# Initialize OpenAI client
-client = OpenAI(api_key=api_key)
+from pathlib import Path
+from typing import TYPE_CHECKING, cast
 
 
-@app.route("/", methods=["GET", "POST"])
-def index():
-    """Render the main prompt UI."""
+SRC_DIR = Path(__file__).resolve().parent / "src"
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
 
-    gpt_response = ""
-    execution_result = ""
-    code_to_execute = ""
-    show_graphic = False
+if TYPE_CHECKING:
+    from flask import Flask as _Flask
 
-    if os.path.exists("./static/graphic.png"):
-        os.remove("./static/graphic.png")
+try:
+    _module = importlib.import_module("scientific_programming_workshop.apps.step_04")
+except ModuleNotFoundError as e:
+    missing = e.name or "<unknown>"
+    raise ModuleNotFoundError(
+        "A required dependency is missing while starting the app.\n\n"
+        f"Missing module: {missing}\n"
+        f"Python executable: {sys.executable}\n\n"
+        "Fix:\n"
+        "- Activate your virtualenv/conda env\n"
+        "- Install dependencies: pip install -r requirements.txt\n"
+    ) from e
 
-    data = pd.read_csv("./data/autoscout24_data.csv")
-
-    data_struct_desc = f"Columns: {list(data.columns)}\n\n"
-    data_struct_desc += f"Data types:\n{data.dtypes}\n\n"
-    data_struct_desc += f"Example rows:\n{data.head(5).to_string(index=False)}"
-
-    if request.method == "POST":
-        user_prompt = request.form.get("prompt", "")
-
-        prompt_for_gpt = (
-            "You have a pandas DataFrame called 'data' "
-            "loaded from './data/autoscout24_data.csv'. "
-            "Here is the structure of the DataFrame:\n\n"
-            f"{data_struct_desc}\n\n"
-            "Please write Python code that works with this DataFrame.\n\n"
-            f"User Prompt: {user_prompt}"
-        )
-
-        try:
-            response = client.chat.completions.create(
-                model="gpt-4.1-mini",
-                messages=[{"role": "user", "content": prompt_for_gpt}],
-                max_tokens=300,
-            )
-            gpt_response = response.choices[0].message.content
-            code_blocks = re.findall(
-                r"```(?:python)?(.*?)```",
-                gpt_response,
-                re.DOTALL,
-            )
-            if code_blocks:
-                code_to_execute = code_blocks[0].strip()
-            else:
-                code_to_execute = gpt_response.strip()
-
-            old_stdout = sys.stdout
-            redirected_output = io.StringIO()
-            sys.stdout = redirected_output
-
-            try:
-                exec_globals = {
-                    "data": data,
-                    "pd": pd,
-                    "plt": plt,
-                }
-                getattr(builtins, "exec")(code_to_execute, exec_globals)  # nosec B102
-
-                if plt.get_fignums():
-                    plt.savefig("./static/graphic.png")
-                    plt.close()
-                    show_graphic = True
-            except (
-                SyntaxError,
-                NameError,
-                TypeError,
-                ValueError,
-                KeyError,
-                AttributeError,
-                IndexError,
-                ZeroDivisionError,
-                RuntimeError,
-                ImportError,
-            ) as ex:  # pylint: disable=broad-exception-caught  # type: ignore
-                execution_result = f"Error executing code:\n{ex}"
-            else:
-                execution_result = redirected_output.getvalue()
-            finally:
-                sys.stdout = old_stdout
-
-        except OpenAIError as e:  # pylint: disable=broad-exception-caught
-            gpt_response = f"Error calling OpenAI API: {str(e)}"
-
-    return render_template(
-        "index_step_04.html",
-        prompt=request.form.get("prompt", ""),
-        gpt_response=gpt_response,
-        code_to_execute=code_to_execute,
-        execution_result=execution_result,
-        show_graphic=show_graphic,
-    )
-
-
-@app.route("/data")
-def data_page():
-    """Render a small HTML sample of the dataset."""
-
-    try:
-        data = pd.read_csv("./data/autoscout24_data.csv")
-        sample = data.head(10).to_html(classes="data", index=False)
-    except (
-        OSError,
-        UnicodeDecodeError,
-        ValueError,
-        pd.errors.ParserError,
-    ) as e:  # pylint: disable=broad-exception-caught
-        sample = f"<p>Error loading data: {e}</p>"
-    return render_template("data.html", table_html=sample)
-
-
-@app.route("/questions")
-def example_question():
-    """Render an example question for users."""
-
-    example_prompt = "What is the average price of cars by fuel type?"
-    return render_template("questions.html", prompt_example=example_prompt)
+app = cast("_Flask", getattr(_module, "app"))
 
 
 if __name__ == "__main__":

@@ -16,8 +16,18 @@ project/
 ├── .devcontainer/
 │    └── devcontainer.json       → Configuration file for setting up the Dev Container
 │
-├── app_step_01.py               → The main app file (step 1)
-├── Procfile                     → Configuration file for deployment (e.g. on Koyeb)
+├── app_step_01.py               → App entrypoint (step 1)
+├── app_step_02.py               → App entrypoint (step 2)
+├── app_step_03.py               → App entrypoint (step 3)
+├── app_step_04.py               → App entrypoint (step 4) + production entrypoint for Procfile
+├── Procfile                     → Deployment start command (e.g. on Koyeb)
+├── requirements.txt             → Runtime dependencies
+├── requirements-dev.txt         → Dev/test dependencies (e.g. pytest)
+├── src/                         → Python package source (professional “src layout”)
+│   └── scientific_programming_workshop/
+│       └── apps/                → Flask app implementations for each step
+├── tests/                       → Automated tests (pytest)
+│   └── test_*.py
 ├── data/
 │   └── autoscout24_data.csv     → .csv file with car data
 │
@@ -25,7 +35,7 @@ project/
 │   ├── css/
 |   |    └── styles.css          → File to define styles (CSS) in HTML pages
 |   ├── logo.svg                 → .svg graphic (use your own if required)
-|   └── graphic.png              → graphic.png (placeholder, will dynamically be overwritten)
+|   ├── graphic.png              → generated plot output (created/overwritten by the app)
 │   
 ├── templates/
 │   ├── index_step_01.html       → Main HTML page for user input and output (step 1)
@@ -33,11 +43,51 @@ project/
 │   ├── index_step_03.html       → Main HTML page for user input and output (step 3)
 │   ├── index_step_04.html       → Main HTML page for user input and output (step 4)
 │
-├── Procfile                     → File with infos for e.g. Heroku/Koyeb what command to run to start the app
 ├── README.md                    → This file
 ├── .env.example                 → example .env file
 ├── .env                         → .env file with OpenAI API key (provided on Moodle)
-└── requirements.txt             → File to specify the Python libraries
+└── .vscode/settings.json         → Workspace settings (tests, Python analysis)
+```
+
+## Professional `src/` + `tests/` layout (added)
+
+This repo now also contains a more “production-like” Python layout:
+
+```bash
+src/
+  scientific_programming_workshop/
+    apps/
+      step_01.py
+      step_02.py
+      step_03.py
+      step_04.py
+tests/
+  conftest.py
+  test_step_04_smoke.py
+```
+
+The workshop entrypoints (`app_step_01.py` … `app_step_04.py`) are still present at the repository root and simply import the real Flask apps from `src/`. This keeps:
+
+```bash
+python app_step_01.py
+```
+
+working as shown in the workshop instructions, and also keeps the deployment entrypoint in `Procfile` working.
+
+Note: don’t run `src/scientific_programming_workshop/apps/step_04.py` directly with `python step_04.py` (it uses package-relative imports). Use the root entrypoints (recommended) or run as a module.
+
+### Running tests
+
+Install dev dependencies:
+
+```bash
+pip install -r requirements-dev.txt
+```
+
+Then run:
+
+```bash
+pytest
 ```
 
 The following files are **ready to use** and don't need to be modified:
@@ -58,7 +108,7 @@ python app_step_01.py
 ## 1. Audit Existing Files
 
 - Configuration: Check .devcontainer/devcontainer.json and Procfile setup.
-- Backend: Discuss the required functionality of app.py in your team.
+- Backend: Discuss the required functionality of the Flask app (use `app_step_01.py` … `app_step_04.py` as entrypoints; implementation is in `src/`).
 - Data: Examine the file autoscout24_data.csv.
 - OpenAI API-key: Ensure a .env file is available and contains a valid API-key.
   - An API-key is available on the course days (Week 11 & Week 12) on Moodle.
@@ -127,7 +177,7 @@ OPENAI_API_KEY=sk-proj-...
 
 ## 6. Prepare for Deployment
 
-- Procfile: Ensure it correctly references 'web: gunicorn app:app'.
+- Procfile: Ensure it correctly references `web: gunicorn app_step_04:app`.
 - Dependencies: Verify requirements.txt includes all required packages.
 - Environment Variables: Secure the OpenAI API-key (use only in your GitHub Codespaces environment).
 
