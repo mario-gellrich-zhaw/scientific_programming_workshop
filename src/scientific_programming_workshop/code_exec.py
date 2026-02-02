@@ -1,3 +1,5 @@
+"""Helpers for extracting and executing model-generated Python code."""
+
 from __future__ import annotations
 
 import builtins
@@ -12,7 +14,6 @@ import pandas as pd
 
 def extract_python_code(text: str) -> str:
     """Extract first python code block from markdown-ish text."""
-
     code_blocks = re.findall(r"```(?:python)?(.*?)```", text, re.DOTALL)
     if code_blocks:
         return code_blocks[0].strip()
@@ -21,6 +22,8 @@ def extract_python_code(text: str) -> str:
 
 @dataclass(frozen=True)
 class ExecResult:
+    """Result of executing code in the app."""
+
     stdout: str
     error: str
     show_graphic: bool
@@ -38,7 +41,6 @@ def execute_user_code(
 
     Note: this intentionally keeps behaviour close to the workshop steps.
     """
-
     old_stdout = sys.stdout
     redirected_output = io.StringIO()
     sys.stdout = redirected_output

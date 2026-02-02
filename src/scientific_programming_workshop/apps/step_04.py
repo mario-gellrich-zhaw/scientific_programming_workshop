@@ -1,3 +1,5 @@
+"""Flask app implementation for workshop step 04."""
+
 from __future__ import annotations
 
 import pandas as pd
@@ -12,6 +14,7 @@ from ..plotting import configure_plot_style, plt
 
 
 def create_app() -> Flask:
+    """Create and configure the Step 04 Flask application."""
     configure_plot_style()
 
     flask_app = Flask(
@@ -52,7 +55,7 @@ def create_app() -> Flask:
                     messages=[{"role": "user", "content": prompt_for_gpt}],
                     max_tokens=300,
                 )
-                gpt_response = response.choices[0].message.content
+                gpt_response = response.choices[0].message.content or ""
                 code_to_execute = extract_python_code(gpt_response)
 
                 result: ExecResult = execute_user_code(

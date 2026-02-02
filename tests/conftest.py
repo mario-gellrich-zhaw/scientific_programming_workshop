@@ -1,3 +1,5 @@
+"""Pytest fixtures for the workshop apps."""
+
 from __future__ import annotations
 
 import importlib
@@ -13,6 +15,7 @@ if str(SRC_DIR) not in sys.path:
 
 @pytest.fixture(name="flask_app_step_04")
 def _flask_app_step_04():
+    """Create a Flask app instance for step 04 tests."""
     module = importlib.import_module("scientific_programming_workshop.apps.step_04")
     create_app = getattr(module, "create_app")
 
@@ -23,4 +26,5 @@ def _flask_app_step_04():
 
 @pytest.fixture()
 def client_step_04(flask_app_step_04):
+    """Return a Flask test client for step 04."""
     return flask_app_step_04.test_client()

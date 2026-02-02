@@ -1,3 +1,5 @@
+"""OpenAI client helpers (API key loading and client creation)."""
+
 from __future__ import annotations
 
 import os
@@ -9,7 +11,6 @@ from openai import OpenAI
 
 def get_openai_api_key() -> Optional[str]:
     """Load and return the OPENAI_API_KEY (if present)."""
-
     load_dotenv()
     api_key = os.getenv("OPENAI_API_KEY")
     if api_key and api_key.strip():
@@ -23,7 +24,6 @@ def get_openai_client() -> OpenAI:
     Raises:
         ValueError: if OPENAI_API_KEY isn't set.
     """
-
     api_key = get_openai_api_key()
     if not api_key:
         raise ValueError(

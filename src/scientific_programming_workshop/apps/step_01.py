@@ -1,3 +1,5 @@
+"""Flask app implementation for workshop step 01."""
+
 from __future__ import annotations
 
 from flask import Flask, render_template, request
@@ -8,6 +10,7 @@ from ..paths import STATIC_DIR, TEMPLATES_DIR
 
 
 def create_app() -> Flask:
+    """Create and configure the Step 01 Flask application."""
     flask_app = Flask(
         __name__,
         template_folder=str(TEMPLATES_DIR),
@@ -35,7 +38,7 @@ def create_app() -> Flask:
                     messages=[{"role": "user", "content": prompt_for_gpt}],
                     max_tokens=300,
                 )
-                gpt_response = response.choices[0].message.content
+                gpt_response = response.choices[0].message.content or ""
             except ValueError as e:
                 gpt_response = str(e)
             except OpenAIError as e:  # pylint: disable=broad-exception-caught

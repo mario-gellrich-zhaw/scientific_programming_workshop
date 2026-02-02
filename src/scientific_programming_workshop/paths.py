@@ -1,3 +1,5 @@
+"""Path helpers for locating project resources (data/templates/static)."""
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -8,7 +10,6 @@ def project_root() -> Path:
 
     Assumes this file lives in `src/scientific_programming_workshop/`.
     """
-
     return Path(__file__).resolve().parents[2]
 
 
