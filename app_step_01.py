@@ -16,7 +16,7 @@ if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
 
 if TYPE_CHECKING:
-    from flask import Flask as _Flask
+    from flask import Flask
 
 try:
     _module = importlib.import_module("scientific_programming_workshop.apps.step_01")
@@ -31,7 +31,7 @@ except ModuleNotFoundError as e:
         "- Install dependencies: pip install -r requirements.txt\n"
     ) from e
 
-app = cast("_Flask", getattr(_module, "app"))
+app = cast("Flask", getattr(_module, "app"))
 
 if __name__ == "__main__":
     app.run(debug=True)
