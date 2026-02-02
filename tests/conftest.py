@@ -14,7 +14,7 @@ if str(SRC_DIR) not in sys.path:
 
 @pytest.fixture(name="flask_app_step_04")
 def _flask_app_step_04():
-    module = importlib.import_module("scientific_programming_workshop.apps.step_04")  # pyright: ignore[reportMissingImports]
+    module = importlib.import_module("scientific_programming_workshop.apps.step_04")
     create_app = getattr(module, "create_app")
 
     app = create_app()
