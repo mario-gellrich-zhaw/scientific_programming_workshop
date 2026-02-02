@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+import pandas as pd
 from flask import Flask, render_template, request
 from openai import OpenAIError
-import pandas as pd
 
 from ..code_exec import ExecResult, execute_user_code, extract_python_code
 from ..data_loading import describe_dataframe, load_autoscout_data

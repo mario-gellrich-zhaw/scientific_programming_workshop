@@ -75,4 +75,6 @@ def execute_user_code(
     finally:
         sys.stdout = old_stdout
 
-    return ExecResult(stdout=redirected_output.getvalue(), error=error_msg, show_graphic=show_graphic)
+    return ExecResult(
+        stdout=redirected_output.getvalue(), error=error_msg, show_graphic=show_graphic
+    )

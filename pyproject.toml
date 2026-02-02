@@ -5,3 +5,20 @@ extraPaths = ["src"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+extend-exclude = [
+	".devcontainer",
+	".git",
+	".venv",
+	"venv",
+	"env",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
+[tool.ruff.format]
+quote-style = "double"
